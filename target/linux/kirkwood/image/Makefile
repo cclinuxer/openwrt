@@ -12,8 +12,7 @@ KERNEL_LOADADDR:=0x8000
 
 define Device/dsa-migration
   DEVICE_COMPAT_VERSION := 1.1
-  DEVICE_COMPAT_MESSAGE := Config cannot be migrated from swconfig to DSA \
-	(early adopters with DSA already set up may just force-flash keeping existing config)
+  DEVICE_COMPAT_MESSAGE := Config cannot be migrated from swconfig to DSA
 endef
 
 define Device/Default
@@ -31,7 +30,6 @@ define Device/Default
   IMAGES := sysupgrade.bin factory.bin
   IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
   IMAGE/factory.bin := append-ubi
-  SUPPORTED_DEVICES = $(subst _,$(comma),$(1))
 endef
 
 define Device/checkpoint_l-50
@@ -145,6 +143,18 @@ define Device/raidsonic_ib-nas62x0
   SUPPORTED_DEVICES += ib62x0
 endef
 TARGET_DEVICES += raidsonic_ib-nas62x0
+
+define Device/seagate_blackarmor-nas220
+  DEVICE_VENDOR := Seagate
+  DEVICE_MODEL := Blackarmor NAS220
+  DEVICE_PACKAGES := kmod-hwmon-adt7475 kmod-fs-ext4 kmod-ata-marvell-sata \
+	mdadm kmod-gpio-button-hotplug
+  PAGESIZE := 512
+  SUBPAGESIZE := 256
+  BLOCKSIZE := 16k
+  UBINIZE_OPTS := -e 1
+endef
+TARGET_DEVICES += seagate_blackarmor-nas220
 
 define Device/seagate_dockstar
   DEVICE_VENDOR := Seagate
